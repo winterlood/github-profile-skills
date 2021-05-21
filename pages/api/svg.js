@@ -1,9 +1,15 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import fs from "fs";
+import path from "path";
+
 var express = require("express");
-var app = express();
-app.get("/api/svg", function (req, res) {
-    const svgPath = path.join(__dirname, "/assets", "react_icon.svg");
-    res.sendFile(svgPath);
+const app = express();
+app.set("view engine", "ejs");
+app.use(express.static("../../src/ejs"));
+app.get("/api/svg", (req, res) => {
+    const filePath = path.resolve(".", "public/svg/dokdo.svg");
+    const svgBuffer = fs.readFileSync(filePath);
+    res.setHeader("Content-Type", "image/svg+xml");
+    res.send(svgBuffer);
 });
 
 module.exports = app;
